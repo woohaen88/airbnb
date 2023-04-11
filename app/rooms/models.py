@@ -12,6 +12,7 @@ class Room(CommonModel):
         Required:
             country: str, default: 한국
             city: str, default: 서울
+            name: str,
             price: int,
             rooms: int,
             toilets: int,
@@ -25,6 +26,11 @@ class Room(CommonModel):
 
     """
 
+    class RoomKindChoices(models.TextChoices):
+        ENTIRE_PLACE = "entire_place", _("Entire Place")
+        PRIVATE_ROOM = "private_room", _("Private Room")
+        SHARED_ROOM = "shared_room", _("Shared Room")
+
     country = models.CharField(
         max_length=50,
         default="한국",
@@ -32,6 +38,10 @@ class Room(CommonModel):
     city = models.CharField(
         max_length=80,
         default="서울",
+    )
+    name = models.CharField(
+        _("Name"),
+        max_length=150,
     )
     price = models.PositiveIntegerField(
         _("Price"),
@@ -56,11 +66,6 @@ class Room(CommonModel):
         default=True,
     )
 
-    class RoomKindChoices(models.TextChoices):
-        ENTIRE_PLACE = "entire_place", _("Entire Place")
-        PRIVATE_ROOM = "private_room", _("Private Room")
-        SHARED_ROOM = "shared_room", _("Shared Room")
-
     kind = models.CharField(
         _("Kind"),
         max_length=20,
@@ -78,6 +83,9 @@ class Room(CommonModel):
         "rooms.Amenity",
         verbose_name=_("Amenity"),
     )
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class Amenity(models.Model):
@@ -100,3 +108,9 @@ class Amenity(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        verbose_name_plural = "Amenities"
+
+    def __str__(self) -> str:
+        return self.name
