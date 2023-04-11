@@ -12,10 +12,14 @@ class CustomUserAdmin(UserAdmin):
             None,
             {
                 "fields": (
+                    "avatar",
                     "username",
                     "email",
                     "password",
                     "is_host",
+                    "gender",
+                    "language",
+                    "currency",
                 )
             },
         ),

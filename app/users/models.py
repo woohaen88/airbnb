@@ -39,6 +39,29 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """User Model
+
+    Required:
+        email (emailType) : your email(ex. user@example.com)
+        password (str) : your password
+
+    Optional:
+        username: (str)
+        first_name: (str?)
+        last_name: str?
+        is_staff: bool, default: false
+        is_staff: bool, default: true
+        date_joined: datetime
+        avatar: str(startswith__http://)
+        is_host: bool, default: false
+        gender: TextChoice?, "M", "F"
+        language: TextChoice? "KR", "EN"
+        currency: TextChoice? "WON", "USD
+
+
+
+    """
+
     username = models.CharField(
         _("username"),
         max_length=150,
@@ -73,6 +96,45 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(
         _("date joined"),
         default=timezone.now,
+    )
+
+    avatar = models.URLField(
+        _("avatar"),
+        blank=True,
+        null=True,
+    )
+
+    class GenderChoice(models.TextChoices):
+        MALE = "M", "Male"
+        FEMALE = "F", "FEMALE"
+
+    gender = models.CharField(
+        max_length=6,
+        choices=GenderChoice.choices,
+        blank=True,
+        null=True,
+    )
+
+    class LanguageChoice(models.TextChoices):
+        KR = "kr", _("Korean")
+        EN = "en", _("English")
+
+    language = models.CharField(
+        max_length=2,
+        choices=LanguageChoice.choices,
+        blank=True,
+        null=True,
+    )
+
+    class CurrencyChoice(models.TextChoices):
+        WON = "won", _("Korean Won")
+        USD = "usd", _("Dollar")
+
+    currency = models.CharField(
+        max_length=3,
+        choices=CurrencyChoice.choices,
+        blank=True,
+        null=True,
     )
 
     is_host = models.BooleanField(
