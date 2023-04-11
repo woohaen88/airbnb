@@ -15,6 +15,7 @@ class CustomUserAdmin(UserAdmin):
                     "username",
                     "email",
                     "password",
+                    "is_host",
                 )
             },
         ),
@@ -28,6 +29,7 @@ class CustomUserAdmin(UserAdmin):
                     "groups",
                     "user_permissions",
                 ),
+                "classes": ("collapse",),
             },
         ),
         (

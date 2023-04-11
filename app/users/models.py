@@ -75,6 +75,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=timezone.now,
     )
 
+    is_host = models.BooleanField(
+        default=False,
+    )
+
     objects = UserManager()
 
     USERNAME_FIELD = "email"
