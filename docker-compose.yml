@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ./docker-context/app
+      args:
+        - USER=wyatt
+    restart: always
+    networks:
+      - wyatt
+    volumes:
+      - "./app:/app"
+      - static-data:/data/static
+      - media-data:/data/media
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PORT=${DB_PORT}
+      - DB_PASSWORD=${DB_PASSWORD}
+    
+
+  db:
+    build:
+      context: ./docker-context/db
+    restart: always
+    networks:
+      - wyatt
+    volumes:
+      - db-data:/etc/mysql/conf.d
+    environment:
+      - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
+      - MARIADB_DATABASE=${DB_NAME}
+  
+  webapp:
+    build:
+      context: docker-context/webapp
+    restart: always
+    working_dir: /webapp
+    networks:
+      - wyatt
+    volumes:
+      - "./webapp:/webapp"
+    ports:
+      - "3000:3000"
+
+volumes:
+  db-data:
+  static-data:
+  media-data:
+
+networks:
+  wyatt:

@@ -1,0 +1,15 @@
+from django.db import models
+from common.models import CommonModel
+
+
+class House(CommonModel):
+    """Model definition for House"""
+
+    name = models.CharField(max_length=140)
+    price_per_night = models.PositiveIntegerField()
+    description = models.TextField()
+    address = models.CharField(max_length=140)
+    pets_allowed = models.BooleanField(default=True)
+
+    def __str__(self) -> str:
+        return self.name
