@@ -20,9 +20,12 @@ class Room(CommonModel):
             address: str, default: ""
             pet_friendly: bool, default: true
             kind: choice, [entire_place, private_room, shared_room]
-            [FK] owner: request.user
-            [MtoM] amenities: rooms.Amenity
+
         Optional:
+        Relation:
+            [FK] owner: setting.AUTH_USER_MODEL
+            [FK] category: categories.Category
+            [MtoM] amenities: rooms.Amenity
 
     """
 
@@ -82,6 +85,14 @@ class Room(CommonModel):
     amenities = models.ManyToManyField(
         "rooms.Amenity",
         verbose_name=_("Amenity"),
+    )
+
+    category = models.ForeignKey(
+        "categories.Category",
+        verbose_name=_("Category"),
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
 
     def __str__(self) -> str:
