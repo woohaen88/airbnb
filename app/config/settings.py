@@ -33,6 +33,13 @@ CUSTOM_APPS = [
     "users.apps.UsersConfig",
     "houses.apps.HousesConfig",
     "common.apps.CommonConfig",
+    "experiences.apps.ExperiencesConfig",
+    "categories.apps.CategoriesConfig",
+    "reviews.apps.ReviewsConfig",
+    "wishlists.apps.WishlistsConfig",
+    "bookings.apps.BookingsConfig",
+    "medias.apps.MediasConfig",
+    "direct_messages.apps.DirectMessagesConfig",
 ]
 THIRD_PARTY_APPS = []
 SYSTEM_APPS = [
