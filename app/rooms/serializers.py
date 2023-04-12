@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import serializers
 from rooms.models import (
     Amenity,
@@ -64,13 +65,13 @@ class RoomDetailSerializer(RoomSerializer):
 
         amenities = validated_data.pop("amenities", [])
 
-        room = Room.objects.create(**validated_data)
+        try:
+            with transaction.atomic():
+                room = Room.objects.create(**validated_data)
 
-        for amenity in amenities:
-            try:
-                amenity_obj = Amenity.objects.get(**amenity)
-            except Amenity.DoesNotExist:
-                raise serializers.ValidationError("Content not found.")
-            room.amenities.add(amenity_obj)
-
-        return room
+                for amenity in amenities:
+                    amenity_obj = Amenity.objects.get(**amenity)
+                    room.amenities.add(amenity_obj)
+                return room
+        except Exception:
+            raise serializers.ValidationError("Amenity not found")
