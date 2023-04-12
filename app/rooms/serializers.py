@@ -14,6 +14,10 @@ from typing import Any, Dict
 from ast import literal_eval
 
 
+# type
+from django.db.models.query import QuerySet
+
+
 class AmenitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Amenity
@@ -26,6 +30,12 @@ class AmenitySerializer(serializers.ModelSerializer):
 
 
 class RoomSerializer(serializers.ModelSerializer):
+    rating = serializers.SerializerMethodField()
+
+    def get_rating(self, room: Room):
+        """평점 계산"""
+        return room.rating()
+
     class Meta:
         model = Room
         fields = [
@@ -34,6 +44,7 @@ class RoomSerializer(serializers.ModelSerializer):
             "country",
             "city",
             "price",
+            "rating",
         ]
 
 
@@ -44,6 +55,11 @@ class RoomDetailSerializer(RoomSerializer):
         required=False,
     )
     category = CategorySerializer(required=False)
+
+    is_owner = serializers.SerializerMethodField()
+
+    def get_is_owner(self, room: Room):
+        return room.owner == self.context["request"].user
 
     class Meta(RoomSerializer.Meta):
         fields = RoomSerializer.Meta.fields + [
@@ -56,6 +72,7 @@ class RoomDetailSerializer(RoomSerializer):
             "kind",
             "owner",
             "category",
+            "is_owner",
         ]
 
     def create(self, validated_data):
