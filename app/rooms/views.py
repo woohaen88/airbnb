@@ -15,6 +15,7 @@ from rest_framework.exceptions import (
 )
 from rest_framework.response import Response
 from rest_framework import status
+from reviews.models import Review
 
 
 from rooms.models import (
@@ -22,8 +23,10 @@ from rooms.models import (
     Room,
 )
 
+# serializer
 from categories.models import Category
 from rooms.serializers import AmenitySerializer, RoomSerializer, RoomDetailSerializer
+from reviews.serializers import ReviewSerializer
 
 from ast import literal_eval
 
@@ -31,6 +34,8 @@ from ast import literal_eval
 from django.http import QueryDict
 from typing import Any, Dict
 
+# pagenation
+from rest_framework.pagination import PageNumberPagination
 
 # GET POST /amenity
 # GET PUT DELETE /amenity/1
@@ -73,3 +78,28 @@ class RoomView(ModelViewSet):
 
         with transaction.atomic():
             serializer.save(owner=self.request.user, category=category)
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = "page_size"
+    max_page_size = 1000
+
+
+class RoomReviewsView(ModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = ReviewSerializer
+    lookup_field = "id"
+    lookup_url_kwarg = "room_id"
+    pagination_class = StandardResultsSetPagination
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_object().reviews.all()
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

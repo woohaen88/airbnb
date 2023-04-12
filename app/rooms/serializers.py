@@ -7,6 +7,7 @@ from rooms.models import (
 
 from users.serializers import TinyUserSerializer
 from categories.serializers import CategorySerializer
+from reviews.serializers import ReviewSerializer
 
 from django.http import QueryDict
 from typing import Any, Dict

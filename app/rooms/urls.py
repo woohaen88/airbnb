@@ -33,9 +33,16 @@ room_detail = views.RoomView.as_view(
     }
 )
 
+room_review = views.RoomReviewsView.as_view(
+    {
+        "get": "list",
+    }
+)
+
 urlpatterns = [
     path("", rooms),
     path("<int:room_id>/", room_detail),
+    path("<int:room_id>/reviews/", room_review),
     path("amenity/", amenities),
     path("amenity/<int:amenity_id>/", amenity_detail),
 ]
