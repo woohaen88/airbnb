@@ -12,3 +12,4 @@ pyjwt
 django-environ
 djangorestframework-simplejwt
 django-ninja
+drf-spectacular-sidecar

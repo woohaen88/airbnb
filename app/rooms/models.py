@@ -73,6 +73,8 @@ class Room(CommonModel):
         _("Kind"),
         max_length=20,
         choices=RoomKindChoices.choices,
+        null=True,
+        blank=True,
     )
 
     owner = models.ForeignKey(
@@ -85,6 +87,8 @@ class Room(CommonModel):
     amenities = models.ManyToManyField(
         "rooms.Amenity",
         verbose_name=_("Amenity"),
+        null=True,
+        blank=True,
     )
 
     category = models.ForeignKey(

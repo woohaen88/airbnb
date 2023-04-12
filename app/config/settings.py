@@ -42,7 +42,11 @@ CUSTOM_APPS = [
     "medias.apps.MediasConfig",
     "direct_messages.apps.DirectMessagesConfig",
 ]
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
+    "rest_framework",
+]
 SYSTEM_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -138,3 +142,34 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "users.User"
+
+SPECTACULAR_SETTINGS = {
+    # "SWAGGER_UI_DIST": "SIDECAR",
+    # "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    # "REDOC_DIST": "SIDECAR",
+    "SCHEMA_PATH_PREFIX": "/api/v[1-9]+/",
+    "COMPONENT_SPLIT_PATCH": True,
+    # Split components into request and response parts where appropriate
+    # This setting is highly recommended to achieve the most accurate API
+    # description, however it comes at the cost of having more components.
+    "COMPONENT_SPLIT_REQUEST": True,
+    # Aid client generator targets that have trouble with read-only properties.
+    "COMPONENT_NO_READ_ONLY_REQUIRED": True,
+    # "SWAGGER_UI_DIST": "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest",
+    # "SWAGGER_UI_FAVICON_HREF": "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/favicon-32x32.png",
+    # "REDOC_DIST": "https://cdn.jsdelivr.net/npm/redoc@latest",
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.MultiPartParser",
+    ],
+}

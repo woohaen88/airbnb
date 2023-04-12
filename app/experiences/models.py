@@ -82,10 +82,14 @@ class Experience(CommonModel):
 
 class Perk(CommonModel):
     """
-    What is included on ac Experience
+    Perk
 
     Args:
-        CommonModel (_type_): _description_
+        required:
+            name: str
+        optional:
+            details: str
+            explanation: str
     """
 
     name = models.CharField(
