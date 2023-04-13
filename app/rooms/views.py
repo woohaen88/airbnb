@@ -38,6 +38,7 @@ from typing import Any, Dict
 
 # pagenation
 from rest_framework.pagination import PageNumberPagination
+from django.utils import timezone
 
 
 # GET POST /amenity
@@ -121,10 +122,15 @@ class RoomBookingViewset(ModelViewSet):
     def list(self, request, *args, **kwargs):
         room = self.get_object()
 
+        now = timezone.localtime(timezone.now()).date()
+
+
+
         # 미래의 예약만
         bookings = Booking.objects.filter(
             room=room,
             kind=Booking.BookingKindChoices.ROOM,
+            check_in__gt=now,
         )
 
         serializer = self.get_serializer(bookings, many=True)
