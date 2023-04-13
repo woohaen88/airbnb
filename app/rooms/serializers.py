@@ -7,7 +7,8 @@ from rooms.models import (
 
 from users.serializers import TinyUserSerializer
 from categories.serializers import CategorySerializer
-from reviews.serializers import ReviewSerializer
+from medias.serializers import PhotoSerializer
+
 
 from django.http import QueryDict
 from typing import Any, Dict
@@ -33,6 +34,11 @@ class AmenitySerializer(serializers.ModelSerializer):
 class RoomSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
 
+    photos = PhotoSerializer(
+        many=True,
+        read_only=True,
+    )
+
     def get_rating(self, room: Room):
         """평점 계산"""
         return room.rating()
@@ -46,6 +52,7 @@ class RoomSerializer(serializers.ModelSerializer):
             "city",
             "price",
             "rating",
+            "photos",
         ]
 
 

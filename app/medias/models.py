@@ -32,6 +32,7 @@ class Photo(CommonModel):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
+        related_name="photos",
     )
     experience = models.ForeignKey(
         "experiences.Experience",
@@ -39,6 +40,7 @@ class Photo(CommonModel):
         on_delete=models.CASCADE,
         blank=True,
         null=True,
+        related_name="photos",
     )
 
 
