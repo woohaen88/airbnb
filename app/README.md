@@ -21,8 +21,14 @@ GET PUT DELETE /perk/1 [v]
 
 ### Media
 
-GET POST /photo
-GET PUT DELETE /photo/1
+GET POST /photo [v]
+GET PUT DELETE /photo/1 []
 
 GET POST /video
 GET PUT DELETE /video/1
+
+### Wishlists
+
+GET POST /wishlist [v]
+GET PUT DELETE /wishlist/1
+is_liked
