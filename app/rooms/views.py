@@ -28,7 +28,7 @@ from bookings.models import Booking
 from categories.models import Category
 from rooms.serializers import AmenitySerializer, RoomSerializer, RoomDetailSerializer
 from reviews.serializers import ReviewSerializer
-from bookings.serializers import PublicBookingSerializer
+from bookings.serializers import (PublicBookingSerializer, CreateBookingSerializer,)
 
 from ast import literal_eval
 
@@ -116,6 +116,11 @@ class RoomBookingViewset(ModelViewSet):
     lookup_url_kwarg = "room_id"
     serializer_class = PublicBookingSerializer
 
+    def get_serializer_class(self):
+        if self.action == "create":
+            return CreateBookingSerializer
+        return super().get_serializer_class()
+
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
@@ -123,8 +128,6 @@ class RoomBookingViewset(ModelViewSet):
         room = self.get_object()
 
         now = timezone.localtime(timezone.now()).date()
-
-
 
         # 미래의 예약만
         bookings = Booking.objects.filter(
@@ -135,3 +138,13 @@ class RoomBookingViewset(ModelViewSet):
 
         serializer = self.get_serializer(bookings, many=True)
         return Response(serializer.data)
+    
+    def perform_create(self, serializer):
+        room_id = self.kwargs.get("room_id")
+        try:
+            room = Room.objects.get(id=room_id)
+        except Room.DoesNotExist:
+            raise NotFound
+        
+        # room, 
+        serializer.save(room=room, user=self.request.user, kind=Booking.BookingKindChoices.ROOM,)
