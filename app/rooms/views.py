@@ -1,5 +1,5 @@
 from django.db import transaction
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.mixins import (
     ListModelMixin,
     CreateModelMixin,
@@ -22,11 +22,13 @@ from rooms.models import (
     Amenity,
     Room,
 )
+from bookings.models import Booking
 
 # serializer
 from categories.models import Category
 from rooms.serializers import AmenitySerializer, RoomSerializer, RoomDetailSerializer
 from reviews.serializers import ReviewSerializer
+from bookings.serializers import PublicBookingSerializer
 
 from ast import literal_eval
 
@@ -36,6 +38,7 @@ from typing import Any, Dict
 
 # pagenation
 from rest_framework.pagination import PageNumberPagination
+
 
 # GET POST /amenity
 # GET PUT DELETE /amenity/1
@@ -102,4 +105,27 @@ class RoomReviewsView(ModelViewSet):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class RoomBookingViewset(ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = Room.objects.all()
+    lookup_field = "id"
+    lookup_url_kwarg = "room_id"
+    serializer_class = PublicBookingSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    def list(self, request, *args, **kwargs):
+        room = self.get_object()
+
+        # 미래의 예약만
+        bookings = Booking.objects.filter(
+            room=room,
+            kind=Booking.BookingKindChoices.ROOM,
+        )
+
+        serializer = self.get_serializer(bookings, many=True)
         return Response(serializer.data)

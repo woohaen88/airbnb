@@ -8,6 +8,7 @@ GET POST /room/1/booking
 GET PUT DELETE /room/1/booking/2
 GET POST /amenity [v]
 GET PUT DELETE /amenity/1 [v]
+GET POST /room/1/booking
 
 ### Experience
 
@@ -30,5 +31,6 @@ GET PUT DELETE /video/1
 ### Wishlists
 
 GET POST /wishlist [v]
-GET PUT DELETE /wishlist/1
-is_liked
+GET PUT DELETE /wishlist/1 [v]
+PUT /wishlist/1/room/2 [v]
+is_liked [v]

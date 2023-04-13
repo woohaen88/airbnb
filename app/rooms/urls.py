@@ -39,10 +39,18 @@ room_review = views.RoomReviewsView.as_view(
     }
 )
 
+room_booking = views.RoomBookingViewset.as_view(
+    {
+        "get": "list",
+        "post": "create",
+    }
+)
+
 urlpatterns = [
     path("", rooms),
     path("<int:room_id>/", room_detail),
     path("<int:room_id>/reviews/", room_review),
     path("amenity/", amenities),
     path("amenity/<int:amenity_id>/", amenity_detail),
+    path("<int:room_id>/booking/", room_booking),
 ]

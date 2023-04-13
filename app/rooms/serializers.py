@@ -4,6 +4,7 @@ from rooms.models import (
     Amenity,
     Room,
 )
+from wishlists.models import WishList
 
 from users.serializers import TinyUserSerializer
 from categories.serializers import CategorySerializer
@@ -65,9 +66,14 @@ class RoomDetailSerializer(RoomSerializer):
     category = CategorySerializer(required=False)
 
     is_owner = serializers.SerializerMethodField()
+    is_liked = serializers.SerializerMethodField()
 
     def get_is_owner(self, room: Room):
         return room.owner == self.context["request"].user
+
+    def get_is_liked(self, room: Room) -> bool:
+        request = self.context["request"]
+        return WishList.objects.filter(user=request.user, rooms__id=room.id).exists()
 
     class Meta(RoomSerializer.Meta):
         fields = RoomSerializer.Meta.fields + [
@@ -81,6 +87,7 @@ class RoomDetailSerializer(RoomSerializer):
             "owner",
             "category",
             "is_owner",
+            "is_liked",
         ]
 
     def create(self, validated_data):
