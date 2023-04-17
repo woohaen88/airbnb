@@ -43,6 +43,9 @@ class Photo(CommonModel):
         related_name="photos",
     )
 
+    def __str__(self) -> str:
+        return f"photo-{self.room}-{self.id}"
+
 
 class Video(CommonModel):
     """

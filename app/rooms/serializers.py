@@ -21,6 +21,17 @@ from ast import literal_eval
 from django.db.models.query import QuerySet
 
 
+class AmenityCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Amenity
+        fields = [
+            "id",
+            "name",
+            "description",
+        ]
+        # read_only_fields = ["description"]
+
+
 class AmenitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Amenity
@@ -59,7 +70,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
 class RoomDetailSerializer(RoomSerializer):
     owner = TinyUserSerializer(read_only=True)
-    amenities = AmenitySerializer(
+    amenities = AmenityCreateSerializer(
         many=True,
         required=False,
     )

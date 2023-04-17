@@ -26,9 +26,17 @@ from bookings.models import Booking
 
 # serializer
 from categories.models import Category
-from rooms.serializers import AmenitySerializer, RoomSerializer, RoomDetailSerializer
+from rooms.serializers import (
+    AmenitySerializer,
+    RoomSerializer,
+    RoomDetailSerializer,
+    AmenityCreateSerializer,
+)
 from reviews.serializers import ReviewSerializer
-from bookings.serializers import (PublicBookingSerializer, CreateBookingSerializer,)
+from bookings.serializers import (
+    PublicBookingSerializer,
+    CreateBookingSerializer,
+)
 
 from ast import literal_eval
 
@@ -52,10 +60,16 @@ from django.utils import timezone
 #     UpdateModelMixin,
 #     GenericViewSet
 class AmenityView(ModelViewSet):
-    serializer_class = AmenitySerializer
+    serializer_class = AmenityCreateSerializer
     queryset = Amenity.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "amenity_id"
+
+    def perform_create(self, serializer):
+        name = self.request.data.get("name")
+        if Amenity.objects.filter(name=name).exists():
+            raise ParseError("Amenity이름이 중복됩니다.")
+        serializer.save()
 
 
 class RoomView(ModelViewSet):
@@ -138,13 +152,17 @@ class RoomBookingViewset(ModelViewSet):
 
         serializer = self.get_serializer(bookings, many=True)
         return Response(serializer.data)
-    
+
     def perform_create(self, serializer):
         room_id = self.kwargs.get("room_id")
         try:
             room = Room.objects.get(id=room_id)
         except Room.DoesNotExist:
             raise NotFound
-        
-        # room, 
-        serializer.save(room=room, user=self.request.user, kind=Booking.BookingKindChoices.ROOM,)
+
+        # room,
+        serializer.save(
+            room=room,
+            user=self.request.user,
+            kind=Booking.BookingKindChoices.ROOM,
+        )
