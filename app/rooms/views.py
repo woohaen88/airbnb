@@ -1,3 +1,4 @@
+import time
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.mixins import (
@@ -96,6 +97,10 @@ class RoomView(ModelViewSet):
 
         with transaction.atomic():
             serializer.save(owner=self.request.user, category=category)
+
+    def retrieve(self, request, *args, **kwargs):
+        time.sleep(2)
+        return super().retrieve(request, *args, **kwargs)
 
 
 class StandardResultsSetPagination(PageNumberPagination):

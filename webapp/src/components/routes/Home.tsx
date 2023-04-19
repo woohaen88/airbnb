@@ -3,7 +3,7 @@ import Room from "../Room";
 import RoomSkeleton from "../RoomSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { getRooms } from "../../api";
-
+import { IRoomList } from "../../types";
 
 // Grid
 //   parameters:
@@ -18,26 +18,9 @@ import { getRooms } from "../../api";
 //          columnGap={4}
 //          rowGap={8}
 //          templateColumns={"2fr 1fr"} // 첫번째 칼럼이 두번째 칼럼의 2배
-interface IPhoto {
-  file: string;
-  description: string;
-  room: number;
-  experience: string;
-}
-
-interface IRoom {
-  id: number;
-  name: string;
-  country: string;
-  city: string;
-  price: number;
-  rating: number;
-  photos: IPhoto[];
-  
-}
 
 export default function Home() {
-  const {isLoading, data} = useQuery<IRoom[]>(["rooms"], getRooms);
+  const { isLoading, data } = useQuery<IRoomList[]>(["rooms"], getRooms);
   return (
     <Grid
       mt={10}

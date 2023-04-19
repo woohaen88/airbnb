@@ -10,10 +10,9 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
         fields = [
+            "id",
             "file",
             "description",
-            "room",
-            "experience",
         ]
 
 
@@ -21,6 +20,7 @@ class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         fields = [
+            "id",
             "file",
             "experience",
         ]

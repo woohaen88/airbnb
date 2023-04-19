@@ -45,6 +45,7 @@ class AmenitySerializer(serializers.ModelSerializer):
 
 class RoomSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField()
+    is_owner = serializers.SerializerMethodField()
 
     photos = PhotoSerializer(
         many=True,
@@ -54,6 +55,12 @@ class RoomSerializer(serializers.ModelSerializer):
     def get_rating(self, room: Room):
         """평점 계산"""
         return room.rating()
+
+    def get_is_owner(self, room: Room) -> bool:
+        request = self.context["request"]
+        if request:
+            return room.owner == request.user
+        return False
 
     class Meta:
         model = Room
@@ -65,6 +72,7 @@ class RoomSerializer(serializers.ModelSerializer):
             "price",
             "rating",
             "photos",
+            "is_owner",
         ]
 
 
@@ -85,8 +93,10 @@ class RoomDetailSerializer(RoomSerializer):
     def get_is_liked(self, room: Room) -> bool:
         request = self.context["request"]
         if request.user.is_authenticated:
-            return WishList.objects.filter(user=request.user, rooms__id=room.id).exists()
-        
+            return WishList.objects.filter(
+                user=request.user, rooms__id=room.id
+            ).exists()
+
         return False
 
     class Meta(RoomSerializer.Meta):
