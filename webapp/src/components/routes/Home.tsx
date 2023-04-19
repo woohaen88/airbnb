@@ -1,14 +1,9 @@
-import {
-  VStack,
-  Grid,
-  Box,
-  Image,
-  Text,
-  HStack,
-  Button,
-} from "@chakra-ui/react";
-import { FaStar, FaRegHeart } from "react-icons/fa";
+import { Skeleton, Grid, Box, SkeletonText, VStack } from "@chakra-ui/react";
+
 import Room from "../Room";
+
+import { useEffect, useState } from "react";
+import RoomSkeleton from "../RoomSkeleton";
 
 // Grid
 //   parameters:
@@ -25,6 +20,17 @@ import Room from "../Room";
 //          templateColumns={"2fr 1fr"} // 첫번째 칼럼이 두번째 칼럼의 2배
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [rooms, setRooms] = useState();
+  const fetchRooms = async () => {
+    const response = await fetch("http://localhost:8000/api/v1/room/");
+    const json = await response.json();
+    setRooms(json);
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    fetchRooms();
+  }, []);
   return (
     <Grid
       mt={10}
@@ -42,13 +48,11 @@ export default function Home() {
         "2xl": "repeat(5, 1fr)",
       }}
     >
-      {[
-        1, 2, 3, 13, 12, 31, 23, 123, 1, 31, 23, 123, 1, 321, 23, 12, 3, 123,
-        12, 3, 13, 12, 31, 23, 123, 12, 312, 3, 123, 123, 1, 2, 3, 1, 1, 2, 3,
-        4, 1, 2, 3, 1, 2, 3, 3,
-      ].map((index) => (
-        <Room key={index} />
-      ))}
+      {isLoading ? (
+        <>
+          <RoomSkeleton />
+        </>
+      ) : null}
     </Grid>
   );
 }
