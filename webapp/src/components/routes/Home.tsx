@@ -18,10 +18,26 @@ import RoomSkeleton from "../RoomSkeleton";
 //          columnGap={4}
 //          rowGap={8}
 //          templateColumns={"2fr 1fr"} // 첫번째 칼럼이 두번째 칼럼의 2배
+interface IPhoto {
+  file: string;
+  description: string;
+  room: number;
+  experience: string;
+}
+
+interface IRoom {
+  id: number;
+  name: string;
+  country: string;
+  city: string;
+  price: number;
+  rating: number;
+  photos: IPhoto[];
+}
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
-  const [rooms, setRooms] = useState();
+  const [rooms, setRooms] = useState<IRoom[]>([]);
   const fetchRooms = async () => {
     const response = await fetch("http://localhost:8000/api/v1/room/");
     const json = await response.json();
@@ -51,8 +67,24 @@ export default function Home() {
       {isLoading ? (
         <>
           <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
+          <RoomSkeleton />
         </>
       ) : null}
+      {rooms.map((room) => (
+        <Room
+          imageUrl={room.photos[0].file}
+          name={room.name}
+          rating={room.rating}
+          city={room.city}
+          country={room.country}
+          price={room.price}
+        />
+      ))}
     </Grid>
   );
 }
