@@ -84,3 +84,25 @@ class UserCreationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("password1과 password2가 다름")
 
         return attrs
+
+
+class UserMeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "id",
+            "last_login",
+            "is_superuser",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "is_staff",
+            "is_active",
+            "date_joined",
+            "avatar",
+            "gender",
+            "language",
+            "currency",
+            "is_host",
+        ]

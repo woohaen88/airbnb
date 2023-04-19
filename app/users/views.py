@@ -16,6 +16,7 @@ from users.serializers import (
     AuthSerializer,
     AuthChangePasswordSerializer,
     UserCreationSerializer,
+    UserMeSerializer,
 )
 
 
@@ -94,3 +95,14 @@ class UserCreationView(ModelViewSet):
         email = self.request.data.get("email")
         password1 = self.request.data.get("password1")
         get_user_model().objects.create_user(email=email, password=password1)
+
+
+class UserMeView(ModelViewSet):
+    serializer_class = UserMeSerializer
+    permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, *args, **kwargs):
+        user = request.user
+        instance = get_user_model().objects.get(id=user.id)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)

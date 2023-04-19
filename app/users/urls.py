@@ -25,9 +25,16 @@ userCreate = views.UserCreationView.as_view(
     }
 )
 
+userMe = views.UserMeView.as_view(
+    {
+        "get": "retrieve",
+    }
+)
+
 urlpatterns = [
     path("user-login/", userLogin),
     path("user-changepw/", userChangePassword),
     path("logout/", userLogout),
     path("user-create/", userCreate),
+    path("me/", userMe),
 ]
