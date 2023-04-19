@@ -1,8 +1,5 @@
-import { Skeleton, Grid, Box, SkeletonText, VStack } from "@chakra-ui/react";
-
+import { Grid } from "@chakra-ui/react";
 import Room from "../Room";
-
-import { useEffect, useState } from "react";
 import RoomSkeleton from "../RoomSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { getRooms } from "../../api";
@@ -36,6 +33,7 @@ interface IRoom {
   price: number;
   rating: number;
   photos: IPhoto[];
+  
 }
 
 export default function Home() {
@@ -70,6 +68,8 @@ export default function Home() {
       ) : null}
       {data?.map((room) => (
         <Room
+          key={room.id}
+          id={room.id}
           imageUrl={room.photos[0].file}
           name={room.name}
           rating={room.rating}
