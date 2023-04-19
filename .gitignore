@@ -268,3 +268,4 @@ $RECYCLE.BIN/
 
 
 app/*/migrations/0*.py
+.vscode/settings.json

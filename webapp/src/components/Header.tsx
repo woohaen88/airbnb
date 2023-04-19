@@ -15,7 +15,7 @@ import SignUpModal from "./SignUpModal";
 import useUser from "../lib/useUser";
 
 export default function Header() {
-  const { userLoading, user, isLoggedIn } = useUser();
+  const { userLoading, isLoggedIn, user } = useUser();
   const {
     isOpen: isLoginOpen,
     onClose: onLoginClose,
@@ -31,6 +31,7 @@ export default function Header() {
   const { toggleColorMode } = useColorMode(); // value, function
   const logoColor = useColorModeValue("red.500", "red.200"); // light, dark
   const Icon = useColorModeValue(FaMoon, FaSun); // 컴포넌트는 첫글자가 대문자
+
   return (
     <Stack
       justifyContent={"space-between"}
@@ -57,7 +58,7 @@ export default function Header() {
           aria-label="Toggle dark mode"
           icon={<Icon />}
         ></IconButton>
-        {/* useLoading이 false고 user가 로그인 하지 않은경우 */}
+
         {!userLoading ? (
           !isLoggedIn ? (
             <>
@@ -67,7 +68,7 @@ export default function Header() {
               </Button>
             </>
           ) : (
-            <Avatar size={"md"} />
+            <Avatar name={user?.username} size={"md"} />
           )
         ) : null}
       </HStack>

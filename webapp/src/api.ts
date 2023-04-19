@@ -3,6 +3,7 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: "http://localhost:8000/api/v1/",
+  withCredentials: true,
 });
 
 export const getRooms = () =>
@@ -21,5 +22,5 @@ export const getRoomReviews = ({ queryKey }: QueryFunctionContext) => {
 };
 
 export const getMe = () => {
-  instance.get(`user/me`).then((response) => response.data);
+  return instance.get(`user/me/`).then((response) => response.data);
 };
