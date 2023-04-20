@@ -8,22 +8,21 @@ import {
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { githubLogIn } from "../../api";
+import { kakaoLogIn } from "../../api";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function GithubConfirm() {
+export default function KakaoConfirm() {
   // 화면이 처음 나타났을 때 url에서 http://localhost:3000/social/github?code=xxxxxxxxxxxxxxxxx
   // 코드 값을 가져오기 위해 useLocation Hook을 사용
 
   const toast = useToast();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { search } = useLocation();
   const confirmLogin = async () => {
     const params = new URLSearchParams(search);
     const code = params.get("code");
     if (code) {
-      const status = await githubLogIn(code);
+      const status = await kakaoLogIn(code);
       if (status === 200) {
         toast({
           status: "success",
@@ -36,7 +35,7 @@ export default function GithubConfirm() {
       }
     }
   };
-
+  const { search } = useLocation();
   useEffect(() => {
     confirmLogin();
   }, []);

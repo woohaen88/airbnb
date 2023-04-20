@@ -37,6 +37,9 @@ githubLogin = views.GithubLogIn.as_view(
     }
 )
 
+kakaoLogin = views.KakaoLogIn.as_view()
+
+
 urlpatterns = [
     path("user-login/", userLogin),
     path("user-changepw/", userChangePassword),
@@ -44,4 +47,5 @@ urlpatterns = [
     path("user-create/", userCreate),
     path("me/", userMe),
     path("github/", githubLogin),
+    path("kakao/", kakaoLogin),
 ]
