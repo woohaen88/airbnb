@@ -31,10 +31,17 @@ userMe = views.UserMeView.as_view(
     }
 )
 
+githubLogin = views.GithubLogIn.as_view(
+    {
+        "post": "create",
+    }
+)
+
 urlpatterns = [
     path("user-login/", userLogin),
     path("user-changepw/", userChangePassword),
     path("logout/", userLogout),
     path("user-create/", userCreate),
     path("me/", userMe),
+    path("github/", githubLogin),
 ]

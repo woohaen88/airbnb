@@ -1,3 +1,7 @@
+import requests
+
+from django.conf import settings
+
 from django.contrib.auth import (
     login,
     logout,
@@ -17,6 +21,7 @@ from users.serializers import (
     AuthChangePasswordSerializer,
     UserCreationSerializer,
     UserMeSerializer,
+    GithubLoginSerializer,
 )
 
 
@@ -108,3 +113,58 @@ class UserMeView(ModelViewSet):
         instance = get_user_model().objects.get(id=user.id)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+
+###################################################################################################################
+##                                          Social Login View                                                    ##
+###################################################################################################################
+
+
+class GithubLogIn(ModelViewSet):
+    serializer_class = GithubLoginSerializer
+
+    def create(self, request, *args, **kwargs):
+        code = request.data.get("code")
+        client_id = "e41e6d6c2f43e39f3a7c"
+        GH_SECRET = settings.GH_SECRET
+        access_token_set = requests.post(
+            f"https://github.com/login/oauth/access_token?code={code}&client_id={client_id}&client_secret={GH_SECRET}",
+            headers={"Accept": "application/json"},
+        )
+        access_token = access_token_set.json().get("access_token")
+        user_data_set = requests.get(
+            "https://api.github.com/user",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Accept": "application/json",
+            },
+        )
+
+        user_data = user_data_set.json()
+
+        user_email_set = requests.get(
+            "https://api.github.com/user/emails",
+            headers={
+                "Authorization": f"Bearer {access_token}",
+                "Accept": "application/json",
+            },
+        )
+
+        user_emails = user_email_set.json()
+
+        try:
+            user = get_user_model().objects.get(email=user_emails[0]["email"])
+            login(request, user)
+            return Response(status=status.HTTP_200_OK)
+        except get_user_model().DoesNotExist:  # Github로 계정을 만듬
+            user = get_user_model().objects.create(
+                email=user_emails[0]["email"],
+                username=user_data.get("login"),
+                avatar=user_data.get("avatar_url"),
+            )
+            user.set_unusable_password()  # 이유저는 password로 로그인 할수 없음
+            user.save()
+            login(request, user)
+            return Response(status=status.HTTP_200_OK)
+        # except Exception:
+        #     return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -106,3 +106,12 @@ class UserMeSerializer(serializers.ModelSerializer):
             "currency",
             "is_host",
         ]
+
+
+###################################################################################################################
+##                                          Social Login View                                                    ##
+###################################################################################################################
+class GithubLoginSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    client_id = serializers.CharField()
+    GH_SECRET = serializers.CharField()
