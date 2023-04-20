@@ -13,9 +13,9 @@ userChangePassword = views.AuthView.as_view(
     }
 )
 
-userLogout = views.AuthView.as_view(
+userLogout = views.LogoutView.as_view(
     {
-        "delete": "destroy",
+        "post": "create",
     }
 )
 

@@ -31,7 +31,6 @@ class AuthView(ModelViewSet):
         return super().get_serializer_class()
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         serializer = self.get_serializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
@@ -72,8 +71,11 @@ class AuthView(ModelViewSet):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-    @permission_classes([IsAuthenticated])
-    def destroy(self, request, *args, **kwargs):
+
+class LogoutView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
         logout(request)
         msg = {"message": "logout"}
         return Response(msg, status=status.HTTP_200_OK)
