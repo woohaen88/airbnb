@@ -17,7 +17,13 @@ export default function SocialLogin() {
         <Divider />
       </HStack>
       <VStack>
-        <Button w={"100%"} leftIcon={<FaGithub />} colorScheme={"telegram"}>
+        <Button
+          as="a"
+          href="https://github.com/login/oauth/authorize?client_id=e41e6d6c2f43e39f3a7c&scope=read:user,user:email"
+          w={"100%"}
+          leftIcon={<FaGithub />}
+          colorScheme={"telegram"}
+        >
           Continue with Github
         </Button>
         <Button w={"100%"} leftIcon={<FaComment />} colorScheme={"yellow"}>
@@ -27,3 +33,8 @@ export default function SocialLogin() {
     </Box>
   );
 }
+
+// User ========> Github
+// Github =======> Website  / 127.0.0.1/confrom-gh?token=AbortController
+// abc ============> Django
+// Django =================> Github API
