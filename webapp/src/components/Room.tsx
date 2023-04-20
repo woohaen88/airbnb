@@ -32,11 +32,23 @@ export default function Room({
   price,
 }: IRoomProps) {
   const gray = useColorModeValue("gray.600", "gray.300");
+
   return (
     <Link to={`/room/${id}`}>
       <VStack alignItems={"flex-start"}>
         <Box position="relative" overflow={"hidden"} mb={2} rounded="3xl">
-          <Image minH="280" src={imageUrl} />
+          <Image
+            minH={{
+              sm: "330",
+              md: "330",
+              lg: "330",
+              xl: "330",
+              "2xl": "330",
+            }}
+            src={imageUrl}
+            objectFit={"cover"}
+          />
+
           <Button
             variant={"unstyled"}
             position="absolute"
