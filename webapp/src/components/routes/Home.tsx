@@ -4,6 +4,7 @@ import RoomSkeleton from "../RoomSkeleton";
 import { useQuery } from "@tanstack/react-query";
 import { getRooms } from "../../api";
 import { IRoomList } from "../../types";
+import { useEffect } from "react";
 
 // Grid
 //   parameters:
@@ -21,6 +22,7 @@ import { IRoomList } from "../../types";
 
 export default function Home() {
   const { isLoading, data } = useQuery<IRoomList[]>(["rooms"], getRooms);
+
   return (
     <Grid
       mt={10}

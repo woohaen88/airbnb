@@ -4,7 +4,7 @@ import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { RouterProvider } from "react-router-dom";
 
 import router from "./router";
-import theme from './theme';
+import theme from "./theme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const client = new QueryClient();
@@ -13,14 +13,12 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={client}>
+  <QueryClientProvider client={client}>
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
       <RouterProvider router={router} />
     </ChakraProvider>
-    </QueryClientProvider>
-  </React.StrictMode>
+  </QueryClientProvider>
 );
 
 // ColorModeScript
@@ -30,7 +28,7 @@ root.render(
 // 예를 들어 다크모드라면 사용자가 다크모드를 고르고나서  새로고침 하거나 다시 방문했을 때, 라이트모드를 보여주고 나서 다크모드로 바꾸고 그러는건 안됨
 // 그냥 처음부터 다크모드를 보여줘야함
 // 이렇게 하려면 Chakra부터 제공되는 `ColorModeScript` 컴포넌트를 추가해야함
-// 
+//
 // parameter
 //  initialColorMode : 사용자 정의 Colormode
 //

@@ -97,7 +97,7 @@ export default function Header() {
           ) : (
             <Menu>
               <MenuButton>
-                <Avatar name={user?.username} size={"md"} />
+                <Avatar name={user?.username} size={"md"} src={user?.avatar} />
               </MenuButton>
               <MenuList>
                 <MenuItem onClick={onLogOut}>Log out</MenuItem>

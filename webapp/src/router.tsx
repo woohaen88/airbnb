@@ -3,6 +3,7 @@ import Root from "./components/Root";
 import Home from "./components/routes/Home";
 import NotFound from "./components/routes/NotFound";
 import RoomDetail from "./components/routes/RoomDetail";
+import GithubConfirm from "./components/routes/GithubConfirm";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "room/:roomId",
         element: <RoomDetail />,
+      },
+      {
+        path: "social/github",
+        element: <GithubConfirm />,
       },
     ],
   },
