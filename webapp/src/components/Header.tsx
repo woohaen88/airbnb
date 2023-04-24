@@ -20,6 +20,7 @@ import SignUpModal from "./SignUpModal";
 import useUser from "../lib/useUser";
 import { logOut } from "../api";
 import { useQueryClient } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   const { userLoading, isLoggedIn, user } = useUser();
@@ -100,6 +101,11 @@ export default function Header() {
                 <Avatar name={user?.username} size={"md"} src={user?.avatar} />
               </MenuButton>
               <MenuList>
+                {user?.is_host ? (
+                  <Link to={"room/upload/"}>
+                    <MenuItem>Upload room</MenuItem>
+                  </Link>
+                ) : null}
                 <MenuItem onClick={onLogOut}>Log out</MenuItem>
               </MenuList>
             </Menu>
