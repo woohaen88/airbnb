@@ -78,10 +78,10 @@ export interface IEmailLoginError {
   non_field_errors: string[]
 }
 
-export const userEmailLogIn = ({email, password}:IEmailLoginVariables) => {
+export const userEmailLogIn = ({ email, password }: IEmailLoginVariables) => {
   return instance.post(
     "user/user-login/",
-    {email, password},
+    { email, password },
     {
       headers: {
         "X-CSRFToken": Cookie.get("csrftoken") || "",
@@ -89,3 +89,11 @@ export const userEmailLogIn = ({email, password}:IEmailLoginVariables) => {
     }
   ).then((response) => response.data)
 }
+
+export const getAmenities = () => {
+  return instance.get(`room/amenity/`).then((response) => response.data);
+};
+
+export const getCategories = () => {
+  return instance.get(`category/`).then((response) => response.data);
+};

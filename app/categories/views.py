@@ -22,7 +22,7 @@ class CategoryView(
     RetrieveModelMixin,
     GenericViewSet,
 ):
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().filter(kind=Category.CategoryKindChoices.ROOMS)
     serializer_class = CategorySerializer
 
     lookup_field = "id"
