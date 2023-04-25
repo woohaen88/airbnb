@@ -97,3 +97,31 @@ export const getAmenities = () => {
 export const getCategories = () => {
   return instance.get(`category/`).then((response) => response.data);
 };
+
+export interface IUploadRoomVariables {
+  country: string;
+  city: string;
+  name: string;
+  price: number;
+  rooms: number;
+  toilets: number;
+  description: string;
+  address: string;
+  pet_friendly: boolean;
+  kind: string;
+  amenities: number[];
+  category: number;
+}
+
+
+export const uploadRoom = (variables: IUploadRoomVariables) => {
+  return instance.post(
+    "room/",
+    variables,
+    {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    }
+  ).then((response) => response.data)
+};

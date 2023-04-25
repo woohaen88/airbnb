@@ -8,6 +8,7 @@ from rest_framework.mixins import (
     UpdateModelMixin,
     DestroyModelMixin,
 )
+
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.exceptions import (
@@ -31,7 +32,6 @@ from rooms.serializers import (
     AmenitySerializer,
     RoomSerializer,
     RoomDetailSerializer,
-    AmenityCreateSerializer,
 )
 from reviews.serializers import ReviewSerializer
 from bookings.serializers import (
@@ -61,7 +61,7 @@ from django.utils import timezone
 #     UpdateModelMixin,
 #     GenericViewSet
 class AmenityView(ModelViewSet):
-    serializer_class = AmenityCreateSerializer
+    serializer_class = AmenitySerializer
     queryset = Amenity.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "amenity_id"
@@ -84,12 +84,28 @@ class RoomView(ModelViewSet):
             return RoomSerializer
         return super().get_serializer_class()
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED,
+            headers=headers,
+        )
+
     def perform_create(self, serializer):
-        category_dict = self.request.data.get("category")
-        if isinstance(category_dict, str):
-            category_dict = literal_eval(category_dict)
+        category_id = self.request.data.get("category")
+
+        if isinstance(category_id, str):
+            category_id = literal_eval(category_id)
+
         try:
-            category = Category.objects.get(name=category_dict.get("name"))
+            category = Category.objects.get(id=category_id)
+
             if category.kind != Category.CategoryKindChoices.ROOMS:
                 raise ParseError("Category Kind should be rooms")
         except Category.DoesNotExist:
@@ -99,7 +115,6 @@ class RoomView(ModelViewSet):
             serializer.save(owner=self.request.user, category=category)
 
     def retrieve(self, request, *args, **kwargs):
-        time.sleep(2)
         return super().retrieve(request, *args, **kwargs)
 
 
